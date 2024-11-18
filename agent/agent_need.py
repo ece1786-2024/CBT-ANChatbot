@@ -16,5 +16,8 @@ class RiskAgent(Agent):
 
     def respond_check(self, prompt):
         self.create_response(prompt)
-        check, reason = self.current_respond.split(' ', 1)
-        return check.lower() == "safe", reason
+        try:
+            check, reason = self.current_respond.split(' ', 1)
+            return check.lower() == "safe", reason
+        except ValueError:
+            return False, "Response format invalid for risk evaluation."

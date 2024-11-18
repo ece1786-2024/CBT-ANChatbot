@@ -1,7 +1,18 @@
 import os
 from openai import OpenAI
+from configparser import ConfigParser
 
-os.environ['OPENAI_API_KEY'] = ""
+# Load configuration
+config = ConfigParser()
+
+# Specify the path to the config file
+config_path = os.path.join(os.path.dirname(__file__), "..", "config", "config.ini")
+config.read(config_path)
+
+OPENAI_API_KEY = config.get("OpenAI", "api_key")
+OPENAI_MODEL = config.get("OpenAI", "model")
+
+os.environ['OPENAI_API_KEY'] = OPENAI_API_KEY
 client = OpenAI(
     api_key=os.environ.get("OPENAI_API_KEY"), 
 )
@@ -30,7 +41,7 @@ class Agent:
         Generate a response based on the agent's background and the given prompt.
         """
         response = client.chat.completions.create(
-            model="gpt-4", # changing GPT
+            model=OPENAI_MODEL, # changing GPT
             messages=[
                 {"role": "system", "content": self.background},
                 {"role": "user", "content": prompt},
