@@ -26,27 +26,40 @@ def main():
         cbt_prompt = ("Conversation history:\n" + "\n".join(conversation_history) + "\n\n" if conversation_history else "") + \
                      f"Current conversation:\nUser: {user_prompt}\n\nCBT Agent:"
         conversation_history.append(f"User: {user_prompt}")
-        cbt_response = cbt_agent.create_response(cbt_prompt)
+
+        risk_prompt = f"""
+        User prompt: {user_prompt}
+        """
+
+        is_safe, reason = risk_agent.respond_check(cbt_prompt)
+        if is_safe:
+            cbt_response = cbt_agent.create_response(cbt_prompt)
+        else:
+            print("The conversation is temperary shut down due to:\n{reason}")
+            break
 
         # Check for safety with Risk Agent
         risk_prompt = f"""
-        User prompt: {user_prompt}
-        Talk Agent response: {cbt_response}
+        CBT Agent response: {cbt_response}
         """
+
         is_safe, reason = risk_agent.respond_check(risk_prompt)
 
-        while not is_safe:
-            unsafe_warning = f"""
-            User prompt: {user_prompt}
-            Original answer: {cbt_response}
-            Reason flagged as unsafe: {reason}
-            Please regenerate a safe answer.
-            """
-            cbt_response = cbt_agent.create_response(unsafe_warning)
-            is_safe, reason = risk_agent.respond_check(risk_prompt)
-
-        conversation_history.append(f"CBT Agent: {cbt_response}")
-        print(f"CBT Agent: {cbt_response}")
+        # while not is_safe:
+        #     unsafe_warning = f"""
+        #     User prompt: {user_prompt}
+        #     Original answer: {cbt_response}
+        #     Reason flagged as unsafe: {reason}
+        #     Please regenerate a safe answer.
+        #     """
+        #     cbt_response = cbt_agent.create_response(unsafe_warning)
+        #     is_safe, reason = risk_agent.respond_check(risk_prompt)
+        if is_safe:
+            conversation_history.append(f"CBT Agent: {cbt_response}")
+            print(f"CBT Agent: {cbt_response}")
+        else:
+            print("The conversation is temperary shut down due to:\n{reason}")
+            break
 
         # Trim conversation history if it exceeds max length
         if len(conversation_history) > CONVERSATION_HISTORY_MAX_LENGTH:
