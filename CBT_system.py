@@ -31,19 +31,24 @@ def main():
         User prompt: {user_prompt}
         """
 
-        is_safe, reason = risk_agent.respond_check(cbt_prompt)
-        if is_safe:
-            cbt_response = cbt_agent.create_response(cbt_prompt)
-        else:
-            print("The conversation is temperary shut down due to:\n{reason}")
-            break
+        risk_level, reason, response = risk_agent.respond_check(user_prompt)
+        print(risk_level, " + ", reason, "+",  response)
+
+        if risk_level == "High Risk":
+            risk_agent.risk_times += 1
+            if risk_agent.risk_times >= 3:
+                print("The conversation is temporary shut down due to:\n", reason)
+                break
+        cbt_response = cbt_agent.create_response(cbt_prompt)
 
         # Check for safety with Risk Agent
         risk_prompt = f"""
         CBT Agent response: {cbt_response}
         """
 
-        is_safe, reason = risk_agent.respond_check(risk_prompt)
+        # TODO regenerate response?
+        risk_level, reason, _ = risk_agent.respond_check(risk_prompt)
+
 
         # while not is_safe:
         #     unsafe_warning = f"""
@@ -54,12 +59,19 @@ def main():
         #     """
         #     cbt_response = cbt_agent.create_response(unsafe_warning)
         #     is_safe, reason = risk_agent.respond_check(risk_prompt)
-        if is_safe:
-            conversation_history.append(f"CBT Agent: {cbt_response}")
-            print(f"CBT Agent: {cbt_response}")
-        else:
-            print("The conversation is temperary shut down due to:\n{reason}")
-            break
+
+        # TODO stop?
+        # if is_safe:
+        #     conversation_history.append(f"CBT Agent: {cbt_response}")
+        #     print(f"CBT Agent: {cbt_response}")
+        # else:
+        #     print("The conversation is temporary shut down due to:\n{reason}")
+        #     break
+
+        conversation_history.append(f"CBT Agent: {cbt_response}")
+
+        # TODO append risk response?
+        print(f"CBT Agent: {cbt_response}")
 
         # Trim conversation history if it exceeds max length
         if len(conversation_history) > CONVERSATION_HISTORY_MAX_LENGTH:

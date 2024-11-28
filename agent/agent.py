@@ -30,7 +30,7 @@ class Agent:
         Load the background knowledge from a text file.
         """
         try:
-            with open(file_path, 'r') as file:
+            with open(file_path, 'r', encoding="utf-8") as file:
                 return file.read()
         except FileNotFoundError:
             print(f"Error: Background file '{file_path}' not found.")
