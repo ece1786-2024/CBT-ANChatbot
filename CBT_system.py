@@ -46,9 +46,20 @@ def main():
         CBT Agent response: {cbt_response}
         """
 
-        # TODO regenerate response?
         risk_level, reason, _ = risk_agent.respond_check(risk_prompt)
 
+        # Regenerate response and shut down if exceed 3 times regeneration
+        if risk_level == "High Risk":
+            attempts = 0
+            max_attempts = 3
+            while risk_level == "High Risk" and attempts < max_attempts:
+                cbt_response = risk_agent.regenerate_response(user_prompt, cbt_response, reason)
+                risk_level, reason, _ = risk_agent.respond_check(cbt_response)
+                attempts += 1
+
+            if risk_level == "High Risk":
+                print("The conversation is temporarily shut down due to:\n", reason)
+                break
 
         # while not is_safe:
         #     unsafe_warning = f"""
@@ -60,18 +71,14 @@ def main():
         #     cbt_response = cbt_agent.create_response(unsafe_warning)
         #     is_safe, reason = risk_agent.respond_check(risk_prompt)
 
-        # TODO stop?
-        # if is_safe:
-        #     conversation_history.append(f"CBT Agent: {cbt_response}")
-        #     print(f"CBT Agent: {cbt_response}")
-        # else:
-        #     print("The conversation is temporary shut down due to:\n{reason}")
-        #     break
-
         conversation_history.append(f"CBT Agent: {cbt_response}")
 
-        # TODO append risk response?
         print(f"CBT Agent: {cbt_response}")
+
+        # Append the Risk Agent's response if any
+        if response:
+            conversation_history.append(f"Risk Agent: {response}")
+            print(f"Risk Agent: {response}")
 
         # Trim conversation history if it exceeds max length
         if len(conversation_history) > CONVERSATION_HISTORY_MAX_LENGTH:
