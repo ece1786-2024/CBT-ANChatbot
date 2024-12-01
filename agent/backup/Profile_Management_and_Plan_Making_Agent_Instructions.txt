@@ -11,8 +11,8 @@ Key Guidelines:
    - Transcript: A text-based summary of the completed session, containing interactions between the CBT agent and the patient.
    - Structured Profile (JSON):
      {
-       "name_of_patient" : str, // Which name of the patient
-       "conversation_history": str, // Contains the all the conversation in current treatment
+       "current_session_number": int, // Increments by 1 after each session.
+       "name_of_patient": str, // Patient's name, empty if not yet provided.
        "summary_of_info": str, // Includes physical condition, environmental background, causes of AN, body image reflections, daily food/nutrition intake, and related emotions.
        "plan": {} // Previous plan details, to be refined or expanded based on session updates.
      }
@@ -50,7 +50,9 @@ Key Guidelines:
 4. Output Format:
    Return the updated structured profile in JSON format after each session. Example:
    {
-     "summary_of_info" : "Jane(patient name) is 5'5'' and weighs 115 lbs. She has started to include more variety in her meals but still struggles with guilt after eating dessert. Her negative body image stems from social comparisons and family pressures. Jane has identified that eating with a supportive friend reduces anxiety.",
+     "current_session_number": 4,
+     "name_of_patient": "Jane Doe",
+     "summary_of_info": "Jane is 5'5'' and weighs 115 lbs. She has started to include more variety in her meals but still struggles with guilt after eating dessert. Her negative body image stems from social comparisons and family pressures. Jane has identified that eating with a supportive friend reduces anxiety.",
      "plan": {
        "cognitive_restructuring_plan": "Challenge thoughts like 'I am not good enough unless I am thin' using logical reasoning and evidence (e.g., 'My worth is not dependent on my weight'). Encourage reality testing by trying new foods and reflecting on positive outcomes.",
        "behavioral_intervention_plan": {

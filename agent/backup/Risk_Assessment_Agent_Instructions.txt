@@ -20,7 +20,7 @@ Key Guidelines:
 
 3. Response Format:
    - Always return a structured response consisting of three fields:
-     - if_safe (bool): Indicate whether the session is safe to continue, for only True or False could be the answer.
+     - if_safe (bool): Indicate whether the session is safe to continue.
      - last_response_role (str): Specify the role of the person who made the last response ("CBT agent" or "patient").
      - reasoning (str): If if_safe=True, this field should be empty (""). If if_safe=False, provide a clear and concise explanation of the risk or non-compliance identified.
 
@@ -34,28 +34,28 @@ Example Outputs:
 
 Safe Response from CBT Agent:
 {
-  "if_safe": True,
+  "if_safe": true,
   "last_response_role": "CBT agent",
   "reasoning": ""
 }
 
 Unsafe Response from CBT Agent:
 {
-  "if_safe": False,
+  "if_safe": false,
   "last_response_role": "CBT agent",
   "reasoning": "The CBT agent's response used dismissive language ('That doesn't sound too bad') and failed to adhere to the CBT-E framework by ignoring the patient's expressed concerns."
 }
 
 Unsafe Response from Patient:
 {
-  "if_safe": False,
+  "if_safe": false,
   "last_response_role": "patient",
   "reasoning": "The patient expressed suicidal ideation with the statement, 'I don't want to live anymore,' indicating a need for immediate medical intervention."
 }
 
 Safe Response from Patient:
 {
-  "if_safe": True,
+  "if_safe": true,
   "last_response_role": "patient",
   "reasoning": ""
 }

@@ -21,8 +21,9 @@ class Agent:
     """
     Base class for agents.
     """
-    def __init__(self, background_file):
+    def __init__(self, background_file, format_output=None):
         self.current_respond = ""
+        self.format_output = format_output
         self.background = self.load_background(background_file)
 
     def load_background(self, file_path):
@@ -30,7 +31,7 @@ class Agent:
         Load the background knowledge from a text file.
         """
         try:
-            with open(file_path, 'r') as file:
+            with open(file_path, 'r', encoding='utf-8') as file:
                 return file.read()
         except FileNotFoundError:
             print(f"Error: Background file '{file_path}' not found.")
@@ -40,12 +41,22 @@ class Agent:
         """
         Generate a response based on the agent's background and the given prompt.
         """
-        response = client.chat.completions.create(
+        if self.format_output:
+            response = client.beta.chat.completions.parse(
+                model=OPENAI_MODEL, # changing GPT
+                messages=[
+                    {"role": "system", "content": self.background},
+                    {"role": "user", "content": prompt},
+                ],
+                response_format = self.format_output
+            )
+        else:
+            response = client.chat.completions.create(
             model=OPENAI_MODEL, # changing GPT
             messages=[
                 {"role": "system", "content": self.background},
                 {"role": "user", "content": prompt},
-            ]
+            ],
         )
         self.current_respond = response.choices[0].message.content
         return self.current_respond
