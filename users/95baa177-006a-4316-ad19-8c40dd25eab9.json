@@ -1,0 +1,14 @@
+{
+    "current_session_number": 1,
+    "name_of_patient": "Emily",
+    "summary_of_info": "Emily is 5'5'' and weighs 115 lbs. She has been experiencing feelings of overwhelm due to perfectionism in her academic life and struggles with strict control over her eating habits developed over time as a response to past family stress. She describes her relationship with food as rigid and structured, focused on measuring and calorie counting, which leads to feelings of guilt and anxiety. Emily feels physically exhausted, indicating a connection between her strict eating behaviors and her emotional state. She has begun to address her fears about relaxing these rules, indicating a willingness to explore unmeasured meals with supportive friends.",
+    "plan": {
+        "cognitive_restructuring_plan": "Challenge perfectionist thoughts such as 'I must be in control of everything or I'll fail' using logical reasoning and examining the evidence. Reinforce the belief that her worth is not determined by her eating habits and that it's acceptable to enjoy food without guilt. Encourage Emily to practice gentle reality testing by gradually introducing flexibility in her meals.",
+        "behavioral_intervention_plan": {
+            "weekly_meal_plan": "Initiate the integration of one unmeasured meal with a friend, starting with a casual caf\u00e9 setting where focus is on connection rather than food. Aim to have at least one such meal this coming weekend.",
+            "exposure_therapy": "Continue to explore social eating environments, starting with the planned meal with Claire, to reduce anxiety and build comfort around food.",
+            "body_image_restructuring": "Engage in self-affirmation exercises and journaling to challenge negative body image thoughts and foster a more positive self-image.",
+            "behavioral_monitoring": "Implement a grounding technique during meals by focusing on deep breathing and utilizing a calming mantra. Plan post-meal self-soothing rituals like journaling or walking to process feelings and reinforce positive experiences."
+        }
+    }
+}

@@ -23,21 +23,26 @@ CONVERSATION_ENDING_REMINDER     = config.getint("Conversation","ending_remind")
 
 conversation_history = []
 
-def conversation_structure(risk_agent, cbt_agent):
+def conversation_structure(risk_agent, cbt_agent, profile):
 
     global conversation_history
     count = 0
 
     while count < CONVERSATION_DURATION_MAX_LENGTH:
 
-        if CONVERSATION_DURATION_MAX_LENGTH - count == CONVERSATION_ENDING_REMINDER:
-            print(f"Only {CONVERSATION_ENDING_REMINDER} conversations remaining")
-
         user_prompt = input("\nYou: ")
 
         # Construct the prompt for CBT Agent
-        cbt_prompt = ("Conversation history:\n" + "\n".join(conversation_history) + "\n\n" if conversation_history else "") + \
+        asd = json.dumps(profile)
+        aaa = profile["current_session_number"] != 0
+        cbt_prompt = ((f"Here is the patient previous data: {asd}") if aaa else "This is the first time patient been here") + \
+                     (("Conversation history:\n" + "\n".join(conversation_history) + "\n\n") if conversation_history else "") + \
                      f"Current conversation:\nUser: {user_prompt}\n\nCBT Agent:"
+        
+        if CONVERSATION_DURATION_MAX_LENGTH - count == CONVERSATION_ENDING_REMINDER:
+            print(f"\nOnly {CONVERSATION_ENDING_REMINDER} conversations remaining!!!")
+            cbt_prompt += "\nSystem info: Only {CONVERSATION_ENDING_REMINDER} conversations remaining!"
+
         conversation_history.append(f"User: {user_prompt}")
 
         risk_prompt = f"""
@@ -71,38 +76,47 @@ def conversation_structure(risk_agent, cbt_agent):
         count += 1
     # conversation_history.clear()
     
-def stage_one():
+def stage_one(profile):
     cbt_agent  = CBTAgent(BACKGROUND_FILES["cbt_agent_stage1"])
     risk_agent = RiskAgent(BACKGROUND_FILES["risk_agent"]) 
-    conversation_structure(risk_agent, cbt_agent)
+    conversation_structure(risk_agent, cbt_agent, profile)
 
-def stage_three():
+def stage_three(profile):
     cbt_agent  = CBTAgent(BACKGROUND_FILES["cbt_agent_stage3"])
     risk_agent = RiskAgent(BACKGROUND_FILES["risk_agent"])
-    conversation_structure(risk_agent, cbt_agent)
+    conversation_structure(risk_agent, cbt_agent, profile)
     
 def stage_profile_management(profile, user_profile_path):
     global conversation_history
     profile_agent = ProfileAgent(BACKGROUND_FILES["profile_agent"])
-    prompt = {
+    prompt = json.dumps({
         "summary_of_info"     : profile['summary_of_info'],
-        "conversation_history": conversation_history,
+        "conversation_history": "\n".join(conversation_history),
         "previous_plan"       : profile['plan']                           
-        }
-    respond = profile_agent.create_response(prompt)
-    profile['plan']  = respond.plan
-    profile['summary_of_info'] = respond.summary_of_info
+        })
+    respond = json.loads(profile_agent.create_response(prompt))
+    profile['plan']  = respond['plan']
+    profile['summary_of_info'] = respond['summary_of_info']
     profile['current_session_number'] += 1
     with open(user_profile_path, "w") as user_file:
         json.dump(profile, user_file, indent=4)
     print("Save complete!")
+    export_output(profile['current_session_number'], user_profile_path)
 
-def stage_chooser(profile, user_profile_pat):
+def stage_chooser(profile, user_profile_path):
     if profile['current_session_number'] <= 3:
-        stage_one()
+        stage_one(profile)
     else:
-        stage_three()
-    stage_profile_management(profile, user_profile_pat)
+        stage_three(profile)
+    stage_profile_management(profile, user_profile_path)
+
+def export_output(num, user_profile_path):
+    base_name, _ = os.path.splitext(os.path.basename(user_profile_path))
+    out_put_path = f'export/{base_name}_{num}.txt'
+    with open(out_put_path, "w", encoding='utf-8') as file:
+        for line in conversation_history:
+            file.write(line + "\n") 
+    conversation_history.clear()
 
 def main():
     user_profile, user_profile_path = menu()
