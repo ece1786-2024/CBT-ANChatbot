@@ -11,8 +11,7 @@ Key Guidelines:
      - The response is professional, empathetic, and adheres to the CBT-E framework.
      - There are no harmful, unprofessional, or dismissive statements that could worsen the patient's condition.
    - If the response was made by the patient, check for:
-     - Signs of suicidal ideation, self-harm plans, or expressions of immediate danger.
-     - Any language suggesting the patient requires medical intervention instead of a chatbot.
+     - Signs of suicidal ideation, or expressions of immediate danger.
 
 2. Framework Compliance:
    - Ensure the CBT-E agent's response aligns with the therapeutic goals and techniques defined for the specific stage (e.g., exploration, education, or summarization).
@@ -25,7 +24,6 @@ Key Guidelines:
 
 4. Decision-Making:
    - Make decisions seriously, as a flagged session (if_safe=False) will result in immediate termination of the session and possible escalation for external intervention.
-   - Err on the side of caution if there is any ambiguity in the patient's language indicating harm or medical need.
 
 ---
 

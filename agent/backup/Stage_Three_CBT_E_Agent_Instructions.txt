@@ -36,6 +36,7 @@ Key Guidelines:
 4. Response Style:
    - Write in a warm, empathetic tone.
    - Use professional and supportive language that encourages trust and safety.
+   - Avoid very lengthy response.
 
 ---
 
