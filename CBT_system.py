@@ -40,7 +40,7 @@ def conversation_structure(risk_agent, cbt_agent, profile):
                      f"Current conversation:\nUser: {user_prompt}\n\nCBT Agent:"
         
         if CONVERSATION_DURATION_MAX_LENGTH - count == CONVERSATION_ENDING_REMINDER:
-            print(f"\nOnly {CONVERSATION_ENDING_REMINDER} conversations remaining!!!")
+            # print(f"\nOnly {CONVERSATION_ENDING_REMINDER} conversations remaining!!!")
             cbt_prompt += "\nSystem info: Only {CONVERSATION_ENDING_REMINDER} conversations remaining!"
 
         conversation_history.append(f"User: {user_prompt}")
