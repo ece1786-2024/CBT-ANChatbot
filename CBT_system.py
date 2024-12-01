@@ -35,7 +35,7 @@ def conversation_structure(risk_agent, cbt_agent, profile):
         # Construct the prompt for CBT Agent
         asd = json.dumps(profile)
         aaa = profile["current_session_number"] != 0
-        cbt_prompt = ((f"Here is the patient previous data: {asd}") if aaa else "This is the first time patient been here") + \
+        cbt_prompt = ((f"Here is the patient previous data: {asd}") + ("" if aaa else "This is the first time patient been here")) + \
                      (("Conversation history:\n" + "\n".join(conversation_history) + "\n\n") if conversation_history else "") + \
                      f"Current conversation:\nUser: {user_prompt}\n\nCBT Agent:"
         
