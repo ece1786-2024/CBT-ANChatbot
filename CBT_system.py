@@ -53,7 +53,7 @@ def conversation_structure(risk_agent, cbt_agent, profile):
         if is_safe:
             cbt_response = cbt_agent.create_response(cbt_prompt)
         else:
-            print(f"The conversation is temperary shut down due to:\n{last_response_role} : {reasoning}")
+            print(f"The conversation is temperary shut down due to:\n{last_response_role} : {reasoning}. Please seek immediate help.")
             break
 
         # Check for safety with Risk Agent
