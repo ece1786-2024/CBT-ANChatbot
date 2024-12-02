@@ -1,3 +1,3 @@
 # CBT-ANChatbot
-## Session Transcript
-Mia Chen: https://drive.google.com/drive/folders/17ynrSmUjl6BIPpaAASC3lTLvUEnhvNsq?usp=drive_link
+
+This is the legacy version of the CBT-ANChatbot. The new version can be found at new_structure branch.
