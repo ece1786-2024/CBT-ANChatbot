@@ -10,14 +10,13 @@ Key Guidelines:
    - Transcript: A text-based summary of the completed session, containing interactions between the CBT agent and the patient.
    - Structured Profile (JSON):
      {
-       "name_of_patient" : str, // Which name of the patient
-       "conversation_history": str, // Contains the all the conversation in current treatment
        "summary_of_info": str, // Includes physical condition, environmental background, causes of AN, body image reflections, daily food/nutrition intake, and related emotions.
-       "plan": {} // Previous plan details, to be refined or expanded based on session updates.
+       "conversation_history": str, // Contains the all the conversation in current treatment
+       "previous_plan": {} // Previous plan details, to be refined or expanded based on session updates.
      }
 
 2. Profile Management:
-   - At the first session (current_session_number = 0), initialize the profile with basic information from the session transcript.
+   - At the first session, initialize the profile with basic information from the session transcript.
    - After subsequent sessions, refine and update the summary_of_info field based on insights and progress observed during the session, including:
      - Physical Condition: Update any reported changes in height, weight, or other health metrics.
      - Environmental Background: Add new contextual factors affecting the patient’s eating behaviors or emotional state.
