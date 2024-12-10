@@ -57,7 +57,7 @@ class RiskAgent(Agent):
             return if_safe, last_response_role, reasoning
         except ValueError:
             return False, last_response_role, "Response format invalid for risk evaluation."
-        
+
 #-------------------------ProfileAgent------------------------------
 
 class ProfileAgent(Agent):

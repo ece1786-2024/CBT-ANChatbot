@@ -38,7 +38,7 @@ def conversation_structure(risk_agent, cbt_agent, profile):
         cbt_prompt = ((f"Here is the patient previous data: {asd}") + ("" if aaa else "This is the first time patient been here")) + \
                      (("Conversation history:\n" + "\n".join(conversation_history) + "\n\n") if conversation_history else "") + \
                      f"Current conversation:\nUser: {user_prompt}\n\nCBT Agent:"
-        
+
         if CONVERSATION_DURATION_MAX_LENGTH - count == CONVERSATION_ENDING_REMINDER:
             # print(f"\nOnly {CONVERSATION_ENDING_REMINDER} conversations remaining!!!")
             cbt_prompt += "\nSystem info: Only {CONVERSATION_ENDING_REMINDER} conversations remaining!"
@@ -75,24 +75,24 @@ def conversation_structure(risk_agent, cbt_agent, profile):
             conversation_history = conversation_history[-CONVERSATION_HISTORY_MAX_LENGTH:]
         count += 1
     # conversation_history.clear()
-    
+
 def stage_one(profile):
     cbt_agent  = CBTAgent(BACKGROUND_FILES["cbt_agent_stage1"])
-    risk_agent = RiskAgent(BACKGROUND_FILES["risk_agent"]) 
+    risk_agent = RiskAgent(BACKGROUND_FILES["risk_agent"])
     conversation_structure(risk_agent, cbt_agent, profile)
 
 def stage_three(profile):
     cbt_agent  = CBTAgent(BACKGROUND_FILES["cbt_agent_stage3"])
     risk_agent = RiskAgent(BACKGROUND_FILES["risk_agent"])
     conversation_structure(risk_agent, cbt_agent, profile)
-    
+
 def stage_profile_management(profile, user_profile_path):
     global conversation_history
     profile_agent = ProfileAgent(BACKGROUND_FILES["profile_agent"])
     prompt = json.dumps({
         "summary_of_info"     : profile['summary_of_info'],
         "conversation_history": "\n".join(conversation_history),
-        "previous_plan"       : profile['plan']                           
+        "previous_plan"       : profile['plan']
         })
     respond = json.loads(profile_agent.create_response(prompt))
     profile['plan']  = respond['plan']
@@ -115,12 +115,12 @@ def export_output(num, user_profile_path):
     out_put_path = f'export/{base_name}_{num}.txt'
     with open(out_put_path, "w", encoding='utf-8') as file:
         for line in conversation_history:
-            file.write(line + "\n") 
+            file.write(line + "\n")
     conversation_history.clear()
 
 def main():
     user_profile, user_profile_path = menu()
     stage_chooser(user_profile, user_profile_path)
-    
+
 if __name__ == "__main__":
     main()
