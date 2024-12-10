@@ -32,7 +32,7 @@ def main():
         """
 
         risk_level, reason, response = risk_agent.respond_check(user_prompt)
-        print(risk_level, " + ", reason, "+",  response)
+        # print(risk_level, " + ", reason, "+",  response)
 
         if risk_level == "High Risk":
             risk_agent.risk_times += 1
